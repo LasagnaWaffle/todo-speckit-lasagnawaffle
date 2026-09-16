@@ -38,7 +38,7 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Rule | Enforcement | Introduced |
 |------|-------------|------------|
 | Error body shape `{ "message": "Human-readable explanation." }` | Controllers | Feature 1 |
-| Cross-user access → **`404`**, never `403` | `getAccessibleListOrNull` + list controller | ADR-0002; Feature 2 |
+| Cross-user access → **`404`**, never `403` | `getAccessibleListOrNull` / `getAccessibleTodoOrNull` + controllers | ADR-0002; Features 2–3 |
 
 ## Lists
 
@@ -53,7 +53,26 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Lists returned **alphabetically by name** | `findAll` `order: name ASC` | Feature 2 |
 | Lists view is a single dashboard (`My Lists`); add/edit/delete use dialogs; no sidebar/main split | `Dashboard.vue` | Feature 2 |
 | Lists view shows only lists returned by `GET /todo/lists` for the signed-in user | `Dashboard.vue` | Feature 2 |
-| List rows show **Edit list** and **Delete list** icon actions (Items is Feature 3) | `Dashboard.vue` | Feature 2 |
+| List rows show **Items**, **Edit list**, and **Delete list** icon actions | `Dashboard.vue` | Features 2–3 |
 | Empty lists copy is **"No lists yet. Create your first list."** | `Dashboard.vue` | Feature 2 |
 | Client blocks empty/whitespace list names with **"List name is required."** | `Dashboard.vue` create/rename forms | Feature 2 |
 | List API failures display in a `<v-alert type="error">` | `Dashboard.vue` | Feature 2 |
+
+## Todos
+
+| Rule | Enforcement | Introduced |
+|------|-------------|------------|
+| All todo endpoints require a valid session | `authenticate` on todo routes | Feature 3 |
+| Todo `userId` and `listId` are set from server context; body values are ignored | Todo create | Feature 3 |
+| Parent list must be owned or nested todo routes return **`404`** | `getAccessibleListOrNull` | Feature 3 |
+| Todo reads/updates/deletes scoped to `userId = req.user.id` | `getAccessibleTodoOrNull` | Feature 3 |
+| Todo title trimmed; empty/whitespace rejected | Create/update API + Dashboard dialogs | Feature 3 |
+| Todo title max **255** characters | Create/update API | Feature 3 |
+| New todos default `completed: false` | Todo create | Feature 3 |
+| Todos ordered **incomplete first**, then `createdAt` ascending | `findAll` order + Dashboard `sortTodos` | Feature 3 |
+| Deleting a list cascades to its todos | `List hasMany Todo` `onDelete: CASCADE` | Feature 3 |
+| Items managed in a list-items dialog; **+ Add Item** only inside that dialog | `Dashboard.vue` | Feature 3 |
+| Empty items copy is **"No todos in this list yet."** | Items dialog | Feature 3 |
+| Client blocks empty/whitespace todo titles with **"Todo title is required."** | Add/edit item forms | Feature 3 |
+| Completed todos show struck-through / muted title | Items dialog row styling | Feature 3 |
+| Todo API failures display in a `<v-alert type="error">` | Items dialog | Feature 3 |

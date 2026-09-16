@@ -34,3 +34,5 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | `lists` | Feature 2 |
 | List CRUD API | Feature 2 |
 | Lists dashboard + MenuBar (sign-out) | Feature 2 |
+| `todos` | Feature 3 |
+| Todo CRUD + items dialogs | Feature 3 |
