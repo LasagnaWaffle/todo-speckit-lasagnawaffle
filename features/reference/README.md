@@ -31,3 +31,6 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 |------|------------|
 | `users`, `sessions` | Feature 1 |
 | Register, login, logout | Feature 1 |
+| `lists` | Feature 2 |
+| List CRUD API | Feature 2 |
+| Lists dashboard + MenuBar (sign-out) | Feature 2 |

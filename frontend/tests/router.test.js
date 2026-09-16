@@ -1,6 +1,8 @@
 /**
  * Feature 1 — User Authentication & Session Management
+ * Feature 2 — Todo List Management
  * Spec: features/feature-1-user-auth.md
+ * Spec: features/feature-2-todo-list-management.md
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -37,6 +39,23 @@ describe("Feature 1 — Router guards", () => {
       await router.isReady();
 
       expect(router.currentRoute.value.name).toBe("home");
+    });
+  });
+});
+
+describe("Feature 2 — Todo List Management", () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    await router.push("/login");
+    await router.isReady();
+  });
+
+  describe("US-2.5 — Private lists only", () => {
+    it("Unauthenticated user accesses the dashboard", async () => {
+      await router.push("/");
+      await router.isReady();
+
+      expect(router.currentRoute.value.name).toBe("login");
     });
   });
 });

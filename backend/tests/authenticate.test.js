@@ -74,10 +74,11 @@ describe("Feature 1 — authenticate middleware", () => {
       });
 
       const response = await request(app)
-        .post("/todo/logout")
+        .get("/todo/lists")
         .set(userA.authHeader);
 
       expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
     });
   });
 

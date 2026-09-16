@@ -1,7 +1,7 @@
 # API Reference
 
 **Base path:** `/todo/`  
-**Status:** Integrated API through **Feature 1** (authentication).  
+**Status:** Integrated API through **Feature 2** (authentication, lists).  
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when routes or payloads change.
 
 **Auth:** Send `Authorization: Bearer <token>` on protected routes.  
@@ -12,6 +12,7 @@
 | Area | Feature |
 |------|---------|
 | Register, login, logout | 1 |
+| List CRUD (`GET/POST/PUT/DELETE /todo/lists`) | 2 |
 
 ---
 
@@ -77,3 +78,48 @@
 | `401` | `Invalid username or password.` | Login, unknown user or wrong password |
 | `401` | `Unauthorized! No token provided.` | Protected route, missing/empty Bearer token |
 | `401` | `Unauthorized! Invalid or expired token.` | Protected route, unknown, expired, or cleared token |
+
+---
+
+## Lists (Feature 2)
+
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| `GET` | `/todo/lists` | Yes | Lists owned by caller (array, ordered by `name` ASC) |
+| `POST` | `/todo/lists` | Yes | Create a new list |
+| `PUT` | `/todo/lists/:listId` | Yes | Rename a list |
+| `DELETE` | `/todo/lists/:listId` | Yes | Delete a list owned by the caller |
+
+**Create / rename body:**
+```json
+{ "name": "Groceries" }
+```
+
+**List success** (`200` / `201`):
+```json
+{
+  "id": 1,
+  "name": "Groceries",
+  "userId": 42,
+  "createdAt": "2026-07-02T12:00:00.000Z",
+  "updatedAt": "2026-07-02T12:00:00.000Z"
+}
+```
+
+**GET success** (`200`): array of list objects (empty `[]` when the caller has none).
+
+**Delete success** (`200`):
+```json
+{ "message": "List deleted successfully." }
+```
+
+**Create ownership:** `userId` in the request body is ignored; the saved owner is always `req.user.id`.
+
+**List errors** (`{ "message": "..." }`):
+
+| Status | Message | When |
+|--------|---------|------|
+| `400` | `List name is required.` | Create or rename, empty/whitespace `name` |
+| `400` | `List name must be 100 characters or fewer.` | Create or rename, `name` longer than 100 |
+| `400` | `Invalid list id.` | `listId` is not an integer |
+| `404` | `List with id=<id> not found.` | Missing list, or list owned by another user (never `403`) |
