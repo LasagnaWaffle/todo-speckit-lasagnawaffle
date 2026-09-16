@@ -1,7 +1,7 @@
 # API Reference
 
 **Base path:** `/todo/`  
-**Status:** Integrated API through **Feature 2** (authentication, lists).  
+**Status:** Integrated API through **Feature 4** (authentication, lists, user profile).  
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when routes or payloads change.
 
 **Auth:** Send `Authorization: Bearer <token>` on protected routes.  
@@ -13,6 +13,7 @@
 |------|---------|
 | Register, login, logout | 1 |
 | List CRUD (`GET/POST/PUT/DELETE /todo/lists`) | 2 |
+| User profile (`GET/PUT /todo/users/:id`) | 4 |
 
 ---
 
@@ -123,3 +124,55 @@
 | `400` | `List name must be 100 characters or fewer.` | Create or rename, `name` longer than 100 |
 | `400` | `Invalid list id.` | `listId` is not an integer |
 | `404` | `List with id=<id> not found.` | Missing list, or list owned by another user (never `403`) |
+
+---
+
+## User profile (Feature 4)
+
+| Method | Path | Auth | Purpose |
+|--------|------|------|---------|
+| `GET` | `/todo/users/:id` | Yes | Fetch the authenticated user's profile (`:id` must equal `req.user.id`) |
+| `PUT` | `/todo/users/:id` | Yes | Update the authenticated user's profile |
+
+**Update profile request body:**
+```json
+{
+  "fName": "Jane",
+  "lName": "Doe",
+  "email": "jane@example.com",
+  "username": "jdoe",
+  "password": "newpassword123"
+}
+```
+
+`password` is optional. Omit it to leave the current password unchanged. `role` is read-only and ignored if sent.
+
+**Profile success** (`200`):
+```json
+{
+  "id": 42,
+  "fName": "Jane",
+  "lName": "Doe",
+  "email": "jane@example.com",
+  "username": "jdoe",
+  "role": "worker",
+  "createdAt": "2026-07-02T12:00:00.000Z",
+  "updatedAt": "2026-07-02T12:05:00.000Z"
+}
+```
+
+Password hash is never returned.
+
+**Profile errors** (`{ "message": "..." }`):
+
+| Status | Message | When |
+|--------|---------|------|
+| `400` | `First name is required.` | Update, empty/whitespace `fName` |
+| `400` | `Last name is required.` | Update, empty/whitespace `lName` |
+| `400` | `Email is required.` | Update, empty/whitespace `email` |
+| `400` | `Username is required.` | Update, empty/whitespace `username` |
+| `400` | `Password must be at least 8 characters.` | Update, `password` provided and shorter than 8 |
+| `400` | `Username is already taken.` | Update, duplicate username |
+| `400` | `Email is already registered.` | Update, duplicate email |
+| `400` | `Invalid user id.` | `:id` is not an integer |
+| `404` | `User with id=<id> not found.` | `:id` is not the caller's id, or the user row is missing (never `403`) |

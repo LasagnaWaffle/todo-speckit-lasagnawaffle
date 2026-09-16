@@ -40,3 +40,11 @@ export const getAccessibleListOrNull = async (req, listId) => {
 
   return row ?? null;
 };
+
+export const getAccessibleUserOrNull = async (req, userId) => {
+  if (req.user.id !== userId) {
+    return null;
+  }
+
+  return (await db.user.findByPk(userId)) ?? null;
+};

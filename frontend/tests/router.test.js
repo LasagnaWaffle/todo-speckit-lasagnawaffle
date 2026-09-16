@@ -1,8 +1,10 @@
 /**
  * Feature 1 — User Authentication & Session Management
  * Feature 2 — Todo List Management
+ * Feature 4 — User Profile Management
  * Spec: features/feature-1-user-auth.md
  * Spec: features/feature-2-todo-list-management.md
+ * Spec: features/feature-4-user-profile-management.md
  */
 
 import { describe, it, expect, beforeEach } from "vitest";
@@ -55,6 +57,40 @@ describe("Feature 2 — Todo List Management", () => {
       await router.push("/");
       await router.isReady();
 
+      expect(router.currentRoute.value.name).toBe("login");
+    });
+  });
+});
+
+describe("Feature 4 — User Profile Management", () => {
+  beforeEach(async () => {
+    localStorage.clear();
+    await router.push("/login");
+    await router.isReady();
+  });
+
+  describe("US-4.3 — Log out from profile", () => {
+    it("User logs out from the profile dropdown", async () => {
+      Utils.setStore("user", {
+        userId: 1,
+        token: "test-token",
+        fName: "Jane",
+        lName: "Doe",
+        username: "jdoe",
+      });
+
+      await router.push("/");
+      await router.isReady();
+      expect(router.currentRoute.value.name).toBe("home");
+
+      Utils.removeItem("user");
+      await router.push({ name: "login" });
+      await router.isReady();
+      expect(router.currentRoute.value.name).toBe("login");
+
+      await router.push("/");
+      await router.isReady();
+      expect(Utils.getStore("user")).toBeNull();
       expect(router.currentRoute.value.name).toBe("login");
     });
   });
