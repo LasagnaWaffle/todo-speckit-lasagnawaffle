@@ -59,7 +59,7 @@ describe("App.vue", () => {
     });
 
     expect(wrapper.findComponent({ name: "MenuBar" }).exists()).toBe(true);
-    expect(wrapper.text()).toContain("Jane Doe");
-    expect(wrapper.text()).toContain("Sign out");
+    expect(wrapper.find('[aria-label="Profile"]').exists()).toBe(true);
+    expect(wrapper.text()).not.toContain("Sign out");
   });
 });

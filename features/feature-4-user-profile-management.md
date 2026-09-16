@@ -372,7 +372,7 @@ Each scenario above must map to at least one automated test.
 | US-4.2 | Profile update rejects a duplicate username | `backend/tests/users.test.js` | `Profile update rejects a duplicate username` |
 | US-4.2 | Profile update rejects a duplicate email | `backend/tests/users.test.js` | `Profile update rejects a duplicate email` |
 | US-4.2 | Unauthenticated profile update API request | `backend/tests/users.test.js` | `Unauthenticated profile update API request` |
-| US-4.3 | User logs out from the profile dropdown | `frontend/tests/MenuBar.test.js` | `User logs out from the profile dropdown` |
+| US-4.3 | User logs out from the profile dropdown | `frontend/tests/MenuBar.test.js`, `frontend/tests/router.test.js` | `User logs out from the profile dropdown` |
 | US-4.4 | Menu bar does not show Sign out | `frontend/tests/MenuBar.test.js` | `Menu bar does not show Sign out` |
 
 ---
