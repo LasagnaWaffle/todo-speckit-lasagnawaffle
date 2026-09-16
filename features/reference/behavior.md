@@ -25,7 +25,8 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | `401` / unauthorized API response clears `user` and redirects to login | Axios response interceptor | Feature 1 |
 | Unauthenticated protected UI → redirect to login | Router `beforeEach` | Feature 1 |
 | Signed-in user visiting login/register → redirect to home | Router `beforeEach` | Feature 1 |
-| Home welcome uses the user's first name; **Sign out** is a standalone button; no `MenuBar` | `Home.vue` | Feature 1 |
+| MenuBar shows the signed-in user's name and **Sign out** | `MenuBar` | Feature 2 |
+| MenuBar hidden on login and register routes | `App.vue` | Feature 2 |
 | Default role for new users is `worker` | `users.role` default | Feature 1 |
 | Every authenticated request resolves to `req.user.id` from the session | `authenticate` | Feature 1 |
 | Register email uses shared `emailRules` (required + regex); invalid format **"Enter a valid email address."** | `frontend/src/config/validation.js` + Register | Feature 1 |
@@ -37,3 +38,22 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Rule | Enforcement | Introduced |
 |------|-------------|------------|
 | Error body shape `{ "message": "Human-readable explanation." }` | Controllers | Feature 1 |
+| Cross-user access → **`404`**, never `403` | `getAccessibleListOrNull` + list controller | ADR-0002; Feature 2 |
+
+## Lists
+
+| Rule | Enforcement | Introduced |
+|------|-------------|------------|
+| All list endpoints require a valid session | `authenticate` on list routes | Feature 2 |
+| List `userId` is set from `req.user.id` only; body `userId` is ignored | List create | Feature 2 |
+| List ownership never changes | Update only writes `name` | Feature 2 |
+| Reads/updates/deletes scoped to `userId = req.user.id` | `findAll` where + `getAccessibleListOrNull` | Feature 2 |
+| List name trimmed; empty/whitespace rejected | Create/update API + Dashboard dialogs | Feature 2 |
+| List name max **100** characters | Create/update API | Feature 2 |
+| Lists returned **alphabetically by name** | `findAll` `order: name ASC` | Feature 2 |
+| Lists view is a single dashboard (`My Lists`); add/edit/delete use dialogs; no sidebar/main split | `Dashboard.vue` | Feature 2 |
+| Lists view shows only lists returned by `GET /todo/lists` for the signed-in user | `Dashboard.vue` | Feature 2 |
+| List rows show **Edit list** and **Delete list** icon actions (Items is Feature 3) | `Dashboard.vue` | Feature 2 |
+| Empty lists copy is **"No lists yet. Create your first list."** | `Dashboard.vue` | Feature 2 |
+| Client blocks empty/whitespace list names with **"List name is required."** | `Dashboard.vue` create/rename forms | Feature 2 |
+| List API failures display in a `<v-alert type="error">` | `Dashboard.vue` | Feature 2 |

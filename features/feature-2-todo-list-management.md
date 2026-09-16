@@ -327,6 +327,7 @@ Replaces the Feature 1 placeholder home page. **Single Vue view** (`Dashboard.vu
 | US-2.5 | User attempts to rename another user's list | `backend/tests/lists.test.js` | `User attempts to rename another user's list` |
 | US-2.5 | User attempts to delete another user's list | `backend/tests/lists.test.js` | `User attempts to delete another user's list` |
 | US-2.5 | Client cannot assign a list to another user on create | `backend/tests/lists.test.js` | `Client cannot assign a list to another user on create` |
+| US-2.5 | Unauthenticated user accesses the dashboard | `frontend/tests/router.test.js` | `Unauthenticated user accesses the dashboard` |
 | US-2.5 | Unauthenticated API request to lists | `backend/tests/lists.test.js` | `Unauthenticated API request to lists` |
 
 ---

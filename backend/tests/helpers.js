@@ -7,6 +7,7 @@ export const syncTestDatabase = async () => {
 };
 
 export const resetTestDatabase = async () => {
+  await db.list.destroy({ where: {} });
   await db.session.destroy({ where: {} });
   await db.user.destroy({ where: {} });
 };
@@ -29,4 +30,8 @@ export const registerUser = async (overrides = {}) => {
     token: response.body.token,
     authHeader: { Authorization: `Bearer ${response.body.token}` },
   };
+};
+
+export const createList = async (authHeader, name) => {
+  return request(app).post("/todo/lists").set(authHeader).send({ name });
 };
