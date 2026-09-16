@@ -29,4 +29,10 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 
 | Area | Introduced |
 |------|------------|
-| *(none yet)* | Add rows as features merge to `dev` |
+| `users`, `sessions` | Feature 1 |
+| Register, login, logout | Feature 1 |
+| `lists` | Feature 2 |
+| List CRUD API | Feature 2 |
+| Lists dashboard + MenuBar (sign-out) | Feature 2 |
+| `todos` | Feature 3 |
+| Todo CRUD + items dialogs | Feature 3 |
