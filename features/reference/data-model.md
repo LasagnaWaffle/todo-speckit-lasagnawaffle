@@ -1,6 +1,6 @@
 # Data Model Reference
 
-**Status:** Integrated schema through **Feature 4** (`users`, `sessions`, `lists`, `todos`; profile edits existing `users` columns).
+**Status:** Integrated schema through **Feature 5** (`users`, `sessions`, `lists`, `todos` with optional `dueDate`; profile edits existing `users` columns).
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when schema changes.  
 **Architecture:** [ADR-0003 — MySQL relational database](../../docs/adr/0003-mysql-relational-database.md)
 
@@ -12,6 +12,7 @@
 | `lists` | Feature 2 |
 | `todos` | Feature 3 |
 | Profile `GET`/`PUT` on existing `users` (no new table) | Feature 4 |
+| `todos.dueDate` | Feature 5 |
 
 ---
 
@@ -69,6 +70,7 @@
 | `listId` | INTEGER FK | Required → `lists.id`; cascade on list delete |
 | `title` | STRING(255) | Required; max 255 characters |
 | `completed` | BOOLEAN | Required; default `false` |
+| `dueDate` | DATEONLY | Nullable; optional calendar date (`YYYY-MM-DD`) |
 | `userId` | INTEGER FK | Required → `users.id` |
 | `createdAt` | DATE | Sequelize timestamps |
 | `updatedAt` | DATE | Sequelize timestamps |

@@ -68,12 +68,18 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Todo title trimmed; empty/whitespace rejected | Create/update API + Dashboard dialogs | Feature 3 |
 | Todo title max **255** characters | Create/update API | Feature 3 |
 | New todos default `completed: false` | Todo create | Feature 3 |
-| Todos ordered **incomplete first**, then `createdAt` ascending | `findAll` order + Dashboard `sortTodos` | Feature 3 |
+| `dueDate` is optional; `null` means no due date | Todo create/update | Feature 5 |
+| Due dates are calendar-only `YYYY-MM-DD` (DATEONLY); invalid strings → `400` **"Due date must be a valid date in YYYY-MM-DD format."** | `parseDueDateInput` | Feature 5 |
+| `PUT` `dueDate: null` clears the date; omitting `dueDate` leaves the stored value unchanged | Todo update | Feature 5 |
+| Todos ordered **incomplete first**, then `createdAt` ascending (not by due date) | `findAll` order + Dashboard `sortTodos` | Features 3, 5 |
 | Deleting a list cascades to its todos | `List hasMany Todo` `onDelete: CASCADE` | Feature 3 |
 | Items managed in a list-items dialog; **+ Add Item** only inside that dialog | `Dashboard.vue` | Feature 3 |
 | Empty items copy is **"No todos in this list yet."** | Items dialog | Feature 3 |
 | Client blocks empty/whitespace todo titles with **"Todo title is required."** | Add/edit item forms | Feature 3 |
+| Client blocks an invalid due date with **"Enter a valid due date."**; empty date is allowed | Add/edit item `optionalDueDateRules` | Feature 5 |
 | Completed todos show struck-through / muted title | Items dialog row styling | Feature 3 |
+| Due date shown on the row when set (locale-formatted); add/edit dialogs have an optional date field | Items / add-item / edit-item dialogs | Feature 5 |
+| Incomplete todos with `dueDate` before local today use overdue styling (`text-error`); completed todos do not | Dashboard `isTodoOverdue` | Feature 5 |
 | Todo API failures display in a `<v-alert type="error">` | Items dialog | Feature 3 |
 
 ## Profile & MenuBar
