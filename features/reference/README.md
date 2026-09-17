@@ -33,6 +33,8 @@ They do **not** authorize new scope — implement only from `features/feature-*.
 | Register, login, logout | Feature 1 |
 | `lists` | Feature 2 |
 | List CRUD API | Feature 2 |
-| Lists dashboard + MenuBar (sign-out) | Feature 2 |
+| Lists dashboard + MenuBar | Feature 2 |
 | `todos` | Feature 3 |
 | Todo CRUD + items dialogs | Feature 3 |
+| User profile API + MenuBar dropdown / Edit Profile | Feature 4 |
+| Optional todo due date + overdue styling | Feature 5 |

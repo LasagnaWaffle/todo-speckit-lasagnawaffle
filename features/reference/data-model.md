@@ -1,6 +1,6 @@
 # Data Model Reference
 
-**Status:** Integrated schema through **Feature 3** (`users`, `sessions`, `lists`, `todos`).  
+**Status:** Integrated schema through **Feature 5** (`users`, `sessions`, `lists`, `todos` with optional `dueDate`; profile edits existing `users` columns).
 **Authority for new work:** feature specs in `features/` — update this file in the same PR when schema changes.  
 **Architecture:** [ADR-0003 — MySQL relational database](../../docs/adr/0003-mysql-relational-database.md)
 
@@ -11,6 +11,8 @@
 | `users`, `sessions` | Feature 1 |
 | `lists` | Feature 2 |
 | `todos` | Feature 3 |
+| Profile `GET`/`PUT` on existing `users` (no new table) | Feature 4 |
+| `todos.dueDate` | Feature 5 |
 
 ---
 
@@ -29,6 +31,8 @@
 | `updatedAt` | DATE | Sequelize timestamps |
 
 **Sequelize:** `defaultScope` excludes `password` from query results. Use `unscoped()` when comparing passwords at login.
+
+**Profile (Feature 4):** `fName`, `lName`, `email`, and `username` are editable via `PUT /todo/users/:id`. `password` is optional on update and hashed when provided. `role` is returned but not editable.
 
 ---
 
@@ -66,6 +70,7 @@
 | `listId` | INTEGER FK | Required → `lists.id`; cascade on list delete |
 | `title` | STRING(255) | Required; max 255 characters |
 | `completed` | BOOLEAN | Required; default `false` |
+| `dueDate` | DATEONLY | Nullable; optional calendar date (`YYYY-MM-DD`) |
 | `userId` | INTEGER FK | Required → `users.id` |
 | `createdAt` | DATE | Sequelize timestamps |
 | `updatedAt` | DATE | Sequelize timestamps |
